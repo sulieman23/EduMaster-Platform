@@ -1,4 +1,3 @@
-// ...existing code...
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../../api/client.js";
@@ -53,7 +52,6 @@ export default function Courses() {
       console.error("[Courses] Failed to fetch all:", err);
       const status = err?.response?.status;
       if (status === 401) {
-        // For guests, don't force login prompt; just show list as empty without error
         setError("");
       } else {
         setError("فشل في تحميل الكورسات. افتح Console للمزيد من التفاصيل.");
@@ -65,14 +63,12 @@ export default function Courses() {
   };
 
   const canWatch = (course) => {
-    // Admins can always watch. For users: allow if free OR purchased.
     if (isAdmin) return true;
-    if (!course?.isPaid) return !!course?.videoUrl; // free content
+    if (!course?.isPaid) return !!course?.videoUrl; 
     return hasPurchasedLesson(course.id) && !!course?.videoUrl;
   };
 
   const onPay = async (course) => {
-    // Block protected call for guests
     const hasToken = !!(auth?.token || localStorage.getItem('token'))
     if (!hasToken) {
       console.info('[Courses] guest user attempted pay; redirecting to login')
@@ -94,7 +90,6 @@ export default function Courses() {
 
   useEffect(() => {
     loadAllCourses();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const formatDate = (d) => {
@@ -256,6 +251,6 @@ export default function Courses() {
     </MainLayout>
   );
 }
-// ...existing code...
+
 
 

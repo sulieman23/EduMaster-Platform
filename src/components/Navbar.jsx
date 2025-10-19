@@ -1,4 +1,3 @@
-// ...existing code...
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -32,12 +31,12 @@ function Navbar() {
             Courses
           </Link>
 
-          {/* Student Exams link */}
+        
           <Link
             to="/student-exams"
             className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
           >
-            امتحانات الطلاب
+           Exams
           </Link>
 
           <Link
@@ -86,4 +85,4 @@ function Navbar() {
 }
 
 export default Navbar;
-// ...existing code...
+

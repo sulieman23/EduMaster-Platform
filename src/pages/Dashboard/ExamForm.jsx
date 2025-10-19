@@ -17,13 +17,12 @@ export default function ExamForm() {
     isPublished: false,
     startDate: '',
     endDate: '',
-    questions: [], // array of IDs
+    questions: [], 
   })
   const [allQuestions, setAllQuestions] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  // load all questions for selection
   useEffect(() => {
     const loadQuestions = async () => {
       try {
@@ -31,14 +30,12 @@ export default function ExamForm() {
         const arr = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : []
         setAllQuestions(arr)
       } catch (e) {
-        // silently ignore, form still usable
         setAllQuestions([])
       }
     }
     loadQuestions()
   }, [])
 
-  // load exam if editing
   useEffect(() => {
     const loadExam = async () => {
       if (!isEdit) return

@@ -1,10 +1,7 @@
-// ...existing code...
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import apiClient from "../../api/client.js";
-// ...existing code...
 
-// global flag to prevent duplicate fetch across StrictMode remounts
 if (!window.__studentExamsLoadStarted) {
   window.__studentExamsLoadStarted = false;
 }
@@ -15,31 +12,25 @@ export default function StudentExamsList() {
   const [error, setError] = useState("");
   const triedRef = useRef(false);
 
-  // role-based behavior
   const role = localStorage.getItem("userRole");
   const isAdmin = role === "admin";
 
-  // debug runner
   const [testEp, setTestEp] = useState("/exams");
   const [testResult, setTestResult] = useState("");
 
-  // Endpoint ordering depends on role (per documentation)
-  // Admin: GET /exam
-  // Student: GET /studentExam/exams (or equivalent)
   const endpoints = isAdmin
     ? [
-        "/exam", // documented admin endpoint
-        "/api/v1/exams/", // fallback if deployed with prefix
+        "/exam", 
+        "/api/v1/exams/", 
     "/api/v1/exams",
       ]
     : [
-        "/studentExam/exams", // primary
-        "/api/v1/studentExams/exams", // prefixed variant
+        "/studentExam/exams", 
+        "/api/v1/studentExams/exams", 
   ];
 
   useEffect(() => {
-    // avoid double fetch when StrictMode remounts the component
-    if (!isAdmin) return; // only admins auto-load list
+    if (!isAdmin) return; 
     if (triedRef.current || window.__studentExamsLoadStarted) return;
     triedRef.current = true;
     window.__studentExamsLoadStarted = true;
@@ -55,7 +46,6 @@ export default function StudentExamsList() {
           console.log("[StudentExamsList] trying", ep);
           const res = await apiClient.get(ep);
 
-          // skip HTML responses (backend may return an HTML 404 page)
           const contentType = res?.headers?.["content-type"] || "";
           if (contentType.includes("text/html")) {
             lastError = `HTML response from ${ep} (probably 404 page)`;
@@ -65,7 +55,6 @@ export default function StudentExamsList() {
 
           const data = res?.data;
 
-          // map common shapes: res.data.data, res.data.exams, nested, or root array
           let list = Array.isArray(data?.data)
             ? data.data
             : Array.isArray(data?.exams)
@@ -76,7 +65,6 @@ export default function StudentExamsList() {
             ? data
             : null;
 
-          // If we hit /courses as a fallback, map courses -> exam-like objects
           if (!list && ep === "/courses" && data) {
             const arr = Array.isArray(data)
               ? data
@@ -89,7 +77,7 @@ export default function StudentExamsList() {
                 title: c.title ?? c.name ?? c.courseName ?? "Untitled",
                 duration:
                   c.duration ??
-                  (Array.isArray(c.lessons) ? c.lessons.length * 5 : undefined), // heuristic
+                  (Array.isArray(c.lessons) ? c.lessons.length * 5 : undefined), 
               }));
             }
           }
@@ -112,7 +100,6 @@ export default function StudentExamsList() {
             console.warn(
               `[StudentExamsList] ${ep} -> ${status} unauthorized/forbidden. Check token/role or API permissions.`
             );
-            // stop trying further; this is a permission issue
             break;
           }
           console.log(
@@ -120,10 +107,8 @@ export default function StudentExamsList() {
             body || ""
           );
           if (status === 404) {
-            // try next endpoint
             continue;
           }
-          // for other errors break so we surface the problem
           break;
         }
       }

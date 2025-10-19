@@ -11,13 +11,11 @@ function DashboardHome() {
     const fetchCourses = async () => {
       try {
         setLoading(true)
-        // This would call your admin API endpoint
         const response = await apiClient.get('/admin/courses')
         setCourses(response.data)
       } catch (err) {
         console.error('Failed to fetch courses:', err)
         setError('Failed to load courses')
-        // For demo purposes, show mock data
         setCourses([
           { id: 1, title: 'React Fundamentals', students: 1250, status: 'active' },
           { id: 2, title: 'Advanced JavaScript', students: 890, status: 'active' },

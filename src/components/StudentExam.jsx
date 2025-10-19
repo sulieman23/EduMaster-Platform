@@ -154,9 +154,8 @@ export default function StudentExam() {
           selectedAnswer: value,
         })),
       };
-      // debug: log final payload shape before sending
+
       console.debug("[StudentExam] submit payload", JSON.stringify(payload));
-      // prefer singular endpoint, keep plural v1 as fallback
       let res;
       try {
         res = await apiClient.post(`/studentExam/submit/${examId}`, payload, { requiresAuth: true });

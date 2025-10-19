@@ -11,9 +11,9 @@ function CourseCard({
   rating,
   price,
   originalPrice,
-  courses = null, // new: optional array of courses
+  courses = null,
 }) {
-  // If `courses` prop is provided, render list of titles for courses without video
+ 
   if (Array.isArray(courses)) {
     const noVideo = courses.filter((c) => !(c.video || c.videoUrl));
     return (
@@ -45,7 +45,6 @@ function CourseCard({
     );
   }
 
-  // Default single course card (unchanged UI)
   return (
     <article className="group overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
       <div className="relative overflow-hidden">
