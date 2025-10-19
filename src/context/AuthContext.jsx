@@ -19,7 +19,6 @@ export const AuthProvider = ({ children }) => {
   const login = async (data) => {
     setLoading(true)
     try {
-      // If data has success property, it's already a response object
       if (data.success) {
         const { token: newToken, role: userRole } = data
         
@@ -29,7 +28,6 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('authToken', newToken)
         localStorage.setItem('userRole', userRole)
       } else {
-        // Otherwise, it's credentials - call the API
         const response = await loginApi(data)
         const { token: newToken, role: userRole } = response
         

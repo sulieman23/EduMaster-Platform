@@ -18,13 +18,11 @@ export function EntitlementsProvider({ children }){
       setLoading(true)
       setError('')
       try {
-        // Preferred endpoint per docs
         const res = await api.get('/lesson/my/purchased')
         const d = res?.data?.data ?? res?.data
         const arr = Array.isArray(d) ? d : (Array.isArray(d?.lessons) ? d.lessons : [])
         if (mounted) setPurchasedLessons(arr)
       } catch (e) {
-        // fallback: try to infer from listing paid lessons user may have access to
         try {
           const data = await listLessons({})
           if (mounted) setPurchasedLessons(Array.isArray(data) ? data.filter(x=>x.isPurchased) : [])
@@ -45,7 +43,6 @@ export function EntitlementsProvider({ children }){
     return purchasedLessons.some(l => (l._id ?? l.id) === lessonId)
   }
 
-  // Minimal exam access policy (MVP): allow exams if user has any purchase, or is admin
   const canAccessExams = role === 'admin' || hasAnyPurchase
 
   const value = useMemo(() => ({
